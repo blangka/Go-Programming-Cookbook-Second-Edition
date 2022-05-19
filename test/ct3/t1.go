@@ -2,21 +2,27 @@ package ct3
 
 import "fmt"
 
-// ShowConv demonstrates some type conversion
-func ShowConv() {
+// 형변환
+func T1() {
+
 	// int
 	var a = 24
 
 	// float 64
 	var b = 2.0
-
-	// convert the int to a float64 for this calculation
 	c := float64(a) * b
 	fmt.Println(c)
 
-	// fmt.Sprintf is a good way to convert to strings
-	precision := fmt.Sprintf("%.2f", b)
+	var i interface{}
+	i = "test"
 
-	// print the value and the type
-	fmt.Printf("%s - %T\n", precision, precision)
+	if val, ok := i.(string); ok {
+		fmt.Println("string 타입의 값은", val)
+	}
+
+	if _, ok := i.(int); !ok {
+		fmt.Println("int가 아닌 값이다.")
+	}
+
+	//http://golang.site/go/article/7-Go-%EC%A1%B0%EA%B1%B4%EB%AC%B8 참고
 }
