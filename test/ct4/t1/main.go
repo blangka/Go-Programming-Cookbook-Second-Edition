@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"errors"
@@ -19,7 +19,7 @@ func (c CustomError) Error() string {
 	return fmt.Sprintf("there was an error; %s was the result", c.Result)
 }
 
-func T1() {
+func main() {
 	err := errors.New("this is a quick and easy way to create an error")
 	fmt.Println("errors.New: ", err)
 

@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"context"
@@ -53,6 +53,6 @@ func getFields(ctx context.Context) *log.Fields {
 	return fields
 }
 
-func T5() {
+func main() {
 	initialize()
 }

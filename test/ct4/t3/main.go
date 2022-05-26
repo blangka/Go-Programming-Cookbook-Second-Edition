@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"bytes"
@@ -16,7 +16,7 @@ func passThroughError() error {
 	return errors.Wrap(err, "in passthrougherror")
 }
 
-func T3() {
+func main() {
 	fmt.Println("basic logging and modification of logger:")
 	buf := bytes.Buffer{}
 

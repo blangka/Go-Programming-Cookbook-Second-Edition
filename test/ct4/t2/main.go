@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type ErrorTyped struct {
 	error
 }
 
-func T2() {
+func main() {
 	// Wrap
 	e := errors.New("standard error")
 	fmt.Println("Regular Error - ", WrappedError(e))

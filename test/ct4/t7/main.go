@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func catcher() {
 	panicTest()
 }
 
-func T7() {
+func main() {
 	fmt.Println("before panic")
 	catcher()
 	fmt.Println("after panic")

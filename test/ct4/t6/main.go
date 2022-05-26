@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"errors"
@@ -33,7 +33,7 @@ func useLog() error {
 	return nil
 }
 
-func T6() {
+func main() {
 	if err := useLog(); err != nil {
 		panic(err)
 	}

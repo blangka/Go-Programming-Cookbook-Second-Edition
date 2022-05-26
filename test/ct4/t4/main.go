@@ -1,4 +1,4 @@
-package ct4
+package main
 
 import (
 	"errors"
@@ -38,7 +38,7 @@ func (h *CustomHandler) HandleLog(e *log.Entry) error {
 	return h.handler.HandleLog(e)
 }
 
-func T4() {
+func main() {
 	// Logrus
 	fmt.Println("Logrus:")
 
