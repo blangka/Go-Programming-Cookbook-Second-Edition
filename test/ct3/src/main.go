@@ -7,4 +7,7 @@ func main() {
 	ct3.T2()
 	ct3.T3()
 	ct3.T4()
+	ct3.T5()
+	ct3.T6()
+	ct3.T7()
 }
