@@ -1,36 +1,77 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/blangka/Go-Programming-Cookbook-Second-Edition/test/ct8/t2"
+	"github.com/blangka/Go-Programming-Cookbook-Second-Edition/ct8/t2"
 	"net/http"
 )
 
-// Controller passes state to our handlers
-type controller struct {
-	storage Storage
+func main() {
+	storage := t2.MemStorage{}
+	c := new(&storage)
+	http.HandleFunc("/set", c.setValue)
+	http.HandleFunc("/get", c.getValue(false))
+	http.HandleFunc("/get/default", c.getValue(true))
+
+	fmt.Println("Listening on port :3333")
+	err := http.ListenAndServe(":3333", nil)
+	panic(err)
 }
 
-// New is a Controller 'constructor'
-func New(storage Storage) *controller {
+// controller
+
+type controller struct {
+	storage t2.Storage
+}
+
+func new(storage t2.Storage) *controller {
 	return &controller{
 		storage: storage,
 	}
 }
 
-// Payload is our common response
 type payload struct {
 	Value string `json:"value"`
 }
 
-func main() {
-	storage := controllers.MemStorage{}
-	c := controllers.New(&storage)
-	http.HandleFunc("/get", c.GetValue(false))
-	http.HandleFunc("/get/default", c.GetValue(true))
-	http.HandleFunc("/set", c.SetValue)
+//set get
+func (c *controller) setValue(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	value := r.FormValue("value")
+	c.storage.Put(value)
+	w.WriteHeader(http.StatusOK)
+	p := payload{Value: value}
+	if payload, err := json.Marshal(p); err == nil {
+		w.Write(payload)
+	} else if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 
-	fmt.Println("Listening on port :3333")
-	err := http.ListenAndServe(":3333", nil)
-	panic(err)
+}
+
+func (c *controller) getValue(UseDefault bool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		value := "default"
+		if !UseDefault {
+			value = c.storage.Get()
+		}
+		p := payload{Value: value}
+		w.WriteHeader(http.StatusOK)
+		if payload, err := json.Marshal(p); err == nil {
+			w.Write(payload)
+		}
+	}
 }
