@@ -21,22 +21,22 @@ func main() {
 
 // controller
 
-type controller struct {
+type Controller struct {
 	storage t2.Storage
 }
 
-func new(storage t2.Storage) *controller {
-	return &controller{
+func new(storage t2.Storage) *Controller {
+	return &Controller{
 		storage: storage,
 	}
 }
 
-type payload struct {
+type Payload struct {
 	Value string `json:"value"`
 }
 
 //set get
-func (c *controller) setValue(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) setValue(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -48,7 +48,7 @@ func (c *controller) setValue(w http.ResponseWriter, r *http.Request) {
 	value := r.FormValue("value")
 	c.storage.Put(value)
 	w.WriteHeader(http.StatusOK)
-	p := payload{Value: value}
+	p := Payload{Value: value}
 	if payload, err := json.Marshal(p); err == nil {
 		w.Write(payload)
 	} else if err != nil {
@@ -57,7 +57,7 @@ func (c *controller) setValue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *controller) getValue(UseDefault bool) http.HandlerFunc {
+func (c *Controller) getValue(UseDefault bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if r.Method != "GET" {
@@ -68,7 +68,7 @@ func (c *controller) getValue(UseDefault bool) http.HandlerFunc {
 		if !UseDefault {
 			value = c.storage.Get()
 		}
-		p := payload{Value: value}
+		p := Payload{Value: value}
 		w.WriteHeader(http.StatusOK)
 		if payload, err := json.Marshal(p); err == nil {
 			w.Write(payload)
